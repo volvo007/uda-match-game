@@ -38,16 +38,17 @@ function resetCards() {
     }
 }
 
-// listener of button "restrat"
-function clickRestart() {
-    document.querySelector('.restart').addEventListener('click', restart);
+// reset stars to black ones
+function resetStar() {
+    let stars = document.querySelector('.stars').children;
+    for (let item of stars) {
+        item.innerHTML = '<i class="fa fa-star"></i>';
+    }
 }
 
 let count = 0; // clicks count
 let openList = []; // already opened cards
-let matchList = []; // only allow two cards in the list maximum
-let timeStart = timeEnd = 0;
-let timer;
+let matchList = []; // only allow two cards in the matching list
 
 function restart() {
     resetCards();
@@ -58,12 +59,45 @@ function restart() {
     resetStar();
 }
 
-// reset stars to black ones
-function resetStar() {
-    let stars = document.querySelector('.stars').children;
-    for (let item of stars) {
-        item.innerHTML = '<i class="fa fa-star"></i>';
-    }
+// listener of button "restrat"
+function clickRestart() {
+    document.querySelector('.restart').addEventListener('click', restart);
+}
+
+// actions while clicking cards and function to match two cards
+function clickCard() {
+    document.querySelector('.deck').addEventListener('click', function(e) {
+        let target = e.target;
+        if (target.nodeName == 'LI' && !target.classList.contains('open') &&
+            !target.classList.contains('match') && matchList.length < 2) {
+            console.log('click a close card');
+            count += 1;
+            document.querySelector('.moves').textContent = count;
+            target.className = 'card open show';
+            matchList.push(target);
+            console.log(matchList);
+            if (matchList.length == 2) {
+                if (matchList[0].firstElementChild.className ==
+                    matchList[1].firstElementChild.className) {
+                    matchList[0].className = 'card open match';
+                    matchList[1].className = 'card open match';
+                    openList.push(matchList[0])
+                    console.log('Match successfully')
+                    if (openList.length == 8) {
+                        console.log('Congres!');
+                    }
+                } else {
+                    matchList.forEach(function(item) {
+                        setTimeout(function() {
+                            item.className = 'card';
+                        }, 1000);
+                    });
+                    console.log('Match failed')
+                }
+                matchList = [];
+            }
+        }
+    })
 }
 
 // cards.forEach(function(item) {
@@ -85,5 +119,6 @@ function resetStar() {
 window.onload = function() {
     resetCards();
     document.querySelector('.moves').textContent = '0';
+    clickCard();
     clickRestart();
 }
