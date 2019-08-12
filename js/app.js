@@ -64,6 +64,19 @@ function clickRestart() {
     document.querySelector('.restart').addEventListener('click', restart);
 }
 
+function howManyStars(clickCount) {
+    let stars = document.querySelector('.stars').children;
+    if (clickCount >= 24) {
+        stars[2].innerHTML = '<i class="fa fa-star-o"></i>';
+    }
+    if (clickCount >= 28) {
+        stars[1].innerHTML = '<i class="fa fa-star-o"></i>';
+    }
+    if (clickCount >= 32) {
+        stars[0].innerHTML = '<i class="fa fa-star-o"></i>';
+    }
+}
+
 // actions while clicking cards and function to match two cards
 function clickCard() {
     document.querySelector('.deck').addEventListener('click', function(e) {
@@ -72,6 +85,7 @@ function clickCard() {
             !target.classList.contains('match') && matchList.length < 2) {
             console.log('click a close card');
             count += 1;
+            howManyStars(count);
             document.querySelector('.moves').textContent = count;
             target.className = 'card open show';
             matchList.push(target);
