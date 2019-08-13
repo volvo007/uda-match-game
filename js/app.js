@@ -59,7 +59,7 @@ function restart() {
     resetStar();
 }
 
-// listener of button "restrat"
+// listener of button "restart"
 function clickRestart() {
     document.querySelector('.restart').addEventListener('click', restart);
 }
@@ -75,6 +75,28 @@ function howManyStars(clickCount) {
     if (clickCount >= 32) {
         stars[0].innerHTML = '<i class="fa fa-star-o"></i>';
     }
+}
+
+function modalPop() {
+    let starCount = 0;
+    let emptyStar = "-o";
+    let stars = document.querySelector('.stars').children;
+    // if can find "-o", it means it's an empty star
+    // -1 means it's a full star
+    // only add star while it's a full star
+    for (item of stars) {
+        if (item.innerHTML.indexOf(emptyStar) == -1) {
+            starCount += 1;
+        }
+    }
+    let stepCount = document.querySelector('.moves').textContent;
+    document.querySelector('.modal-body').innerHTML = `With ${stepCount} Moves and ${starCount} Stars`;
+    $('#popout1').modal();
+}
+
+// restart game if click "play again"
+function playAgain() {
+    document.querySelector('.close').addEventListener('click', restart);
 }
 
 // actions while clicking cards and function to match two cards
@@ -99,7 +121,9 @@ function clickCard() {
                     console.log('Match successfully')
                     if (openList.length == 8) {
                         console.log('Congres!');
+                        modalPop();
                     }
+                    matchList = [];
                 } else {
                     matchList.forEach(function(item) {
                         setTimeout(function() {
@@ -107,8 +131,9 @@ function clickCard() {
                         }, 1000);
                     });
                     console.log('Match failed')
+                    matchList = [];
                 }
-                matchList = [];
+                // matchList = [];
             }
         }
     })
@@ -134,5 +159,6 @@ window.onload = function() {
     resetCards();
     document.querySelector('.moves').textContent = '0';
     clickCard();
+    playAgain();
     clickRestart();
 }
