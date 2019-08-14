@@ -18,16 +18,21 @@
             <h1>Matching Game</h1>
         </header>
 
-        <section class="score-panel">
-            <ul class="stars">
-                <li><i class="fa fa-star"></i></li>
-                <li><i class="fa fa-star"></i></li>
-                <li><i class="fa fa-star"></i></li>
-            </ul>
-
-            <span class="moves">3</span> Moves
-
-            <div class="restart">
+        <section class="score-panel row">
+            <div class="col-sm">
+                <ul class="stars">
+                    <li><i class="fa fa-star"></i></li>
+                    <li><i class="fa fa-star"></i></li>
+                    <li><i class="fa fa-star"></i></li>
+                </ul>
+            </div>
+            <div class="col-sm">
+                <span class="moves">3</span> Moves
+            </div>
+            <div class="col-sm">
+                <span class="timer">0</span> second
+            </div>
+            <div class="restart col-sm text-right">
                 <i class="fa fa-repeat"></i>
             </div>
         </section>
@@ -95,6 +100,7 @@
                 </div>
                 <div class="modal-body text-center display-4">
                     <p>With 17 Moves and 1 Stars.</p>
+                    <p>20 seconds passed.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">Play again!</button>

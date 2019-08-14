@@ -49,11 +49,33 @@ function resetStar() {
 let count = 0; // clicks count
 let openList = []; // already opened cards
 let matchList = []; // only allow two cards in the matching list
+// let total = -1;
+let stopWatch;
+
+function timeTotal() {
+    let total = Math.floor((performance.now() - timeStart)/1000);
+    document.querySelector('.timer').textContent = total;
+}
+
+// setInterval() 会不停调用函数，直到 clearInterval() 被调用或窗口被关闭。
+// 由 setInterval() 返回的 ID 值可用作 clearInterval() 方法的参数
+function timer() {
+    timeStart = performance.now();
+    if (stopWatch) {stopTimer();}
+    stopWatch = setInterval("timeTotal()", 1000);
+}
+
+function stopTimer() {
+    clearInterval(stopWatch);
+    stopWatch = -1;
+}
 
 function restart() {
     resetCards();
     count = 0;
     document.querySelector('.moves').textContent = '0';
+    document.querySelector('.timer').textContent = '0';
+    stopTimer();
     openList = [];
     matchList = [];
     resetStar();
@@ -66,13 +88,13 @@ function clickRestart() {
 
 function howManyStars(clickCount) {
     let stars = document.querySelector('.stars').children;
-    if (clickCount >= 24) {
+    if (clickCount > 25) {
         stars[2].innerHTML = '<i class="fa fa-star-o"></i>';
     }
-    if (clickCount >= 28) {
+    if (clickCount > 29) {
         stars[1].innerHTML = '<i class="fa fa-star-o"></i>';
     }
-    if (clickCount >= 32) {
+    if (clickCount > 33) {
         stars[0].innerHTML = '<i class="fa fa-star-o"></i>';
     }
 }
@@ -89,8 +111,11 @@ function modalPop() {
             starCount += 1;
         }
     }
+    // 即使js脚本变量发生了变化（例如这里 totalTime 变量实际上已经归零），但仍然可以使用页面元素的内容来赋值
+    // 可以将页面元素的值作为中转传递给下游函数
     let stepCount = document.querySelector('.moves').textContent;
-    document.querySelector('.modal-body').innerHTML = `With ${stepCount} Moves and ${starCount} Stars`;
+    let total = document.querySelector('.timer').textContent;
+    document.querySelector('.modal-body').innerHTML = `<p>With ${stepCount} Moves and ${starCount} Stars</p><p> ${total} seconds`;
     $('#popout1').modal();
 }
 
@@ -103,6 +128,8 @@ function playAgain() {
 function clickCard() {
     document.querySelector('.deck').addEventListener('click', function(e) {
         let target = e.target;
+        if (document.querySelector('.timer').textContent == '0' && stopWatch == -1) {timer();}
+        // timer();
         if (target.nodeName == 'LI' && !target.classList.contains('open') &&
             !target.classList.contains('match') && matchList.length < 2) {
             console.log('click a close card');
@@ -121,6 +148,7 @@ function clickCard() {
                     console.log('Match successfully')
                     if (openList.length == 8) {
                         console.log('Congres!');
+                        stopTimer();
                         modalPop();
                     }
                     matchList = [];
@@ -139,10 +167,6 @@ function clickCard() {
     })
 }
 
-// cards.forEach(function(item) {
-//     item.className = 'card open show';
-// });
-
 /*
  * 设置一张卡片的事件监听器。 如果该卡片被点击：
  *  - 显示卡片的符号（将这个功能放在你从这个函数中调用的另一个函数中）
@@ -156,8 +180,7 @@ function clickCard() {
 
 
 window.onload = function() {
-    resetCards();
-    document.querySelector('.moves').textContent = '0';
+    restart();
     clickCard();
     playAgain();
     clickRestart();
