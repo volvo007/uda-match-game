@@ -29,7 +29,7 @@ function shuffle(array) {
 }
 
 function resetCards() {
-    // temp_cards = cards;
+    // 尝试过 tempCards = cards, 无法进行后面的循环，只能转成 Array 
     tempCards = Array.prototype.slice.call(cards);
     tempCards = shuffle(tempCards);
     for (let i = 0; i < tempCards.length; i++) {
@@ -49,7 +49,6 @@ function resetStar() {
 let count = 0; // clicks count
 let openList = []; // already opened cards
 let matchList = []; // only allow two cards in the matching list
-// let total = -1;
 let stopWatch;
 
 function timeTotal() {
@@ -129,7 +128,6 @@ function clickCard() {
     document.querySelector('.deck').addEventListener('click', function(e) {
         let target = e.target;
         if (document.querySelector('.timer').textContent == '0' && stopWatch == -1) {timer();}
-        // timer();
         if (target.nodeName == 'LI' && !target.classList.contains('open') &&
             !target.classList.contains('match') && matchList.length < 2) {
             console.log('click a close card');
@@ -161,7 +159,6 @@ function clickCard() {
                     console.log('Match failed')
                     matchList = [];
                 }
-                // matchList = [];
             }
         }
     })
