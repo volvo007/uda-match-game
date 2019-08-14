@@ -1,6 +1,8 @@
 /*
  * 创建一个包含所有卡片的数组
  */
+'use strict';
+
 let deck = document.querySelector('.deck')
 let cards = document.querySelectorAll('.card')
     // notice that cards is not an array, but a NodeArray
@@ -30,7 +32,7 @@ function shuffle(array) {
 
 function resetCards() {
     // 尝试过 tempCards = cards, 无法进行后面的循环，只能转成 Array 
-    tempCards = Array.prototype.slice.call(cards);
+    let tempCards = Array.prototype.slice.call(cards);
     tempCards = shuffle(tempCards);
     for (let i = 0; i < tempCards.length; i++) {
         tempCards[i].className = 'card';
@@ -51,17 +53,17 @@ let openList = []; // already opened cards
 let matchList = []; // only allow two cards in the matching list
 let stopWatch;
 
-function timeTotal() {
-    let total = Math.floor((performance.now() - timeStart)/1000);
+function timeTotal(timeStart) {
+    let total = Math.floor((performance.now() - timeStart) / 1000);
     document.querySelector('.timer').textContent = total;
 }
 
 // setInterval() 会不停调用函数，直到 clearInterval() 被调用或窗口被关闭。
 // 由 setInterval() 返回的 ID 值可用作 clearInterval() 方法的参数
 function timer() {
-    timeStart = performance.now();
-    if (stopWatch) {stopTimer();}
-    stopWatch = setInterval("timeTotal()", 1000);
+    let timeStart = performance.now();
+    if (stopWatch) { stopTimer(); }
+    stopWatch = setInterval(function() { timeTotal(timeStart); }, 1000);
 }
 
 function stopTimer() {
@@ -105,7 +107,7 @@ function modalPop() {
     // if can find "-o", it means it's an empty star
     // -1 means it's a full star
     // only add star while it's a full star
-    for (item of stars) {
+    for (let item of stars) {
         if (item.innerHTML.indexOf(emptyStar) == -1) {
             starCount += 1;
         }
@@ -127,21 +129,21 @@ function playAgain() {
 function clickCard() {
     document.querySelector('.deck').addEventListener('click', function(e) {
         let target = e.target;
-        if (document.querySelector('.timer').textContent == '0' && stopWatch == -1) {timer();}
+        if (document.querySelector('.timer').textContent == '0' && stopWatch == -1) { timer(); }
         if (target.nodeName == 'LI' && !target.classList.contains('open') &&
             !target.classList.contains('match') && matchList.length < 2) {
             console.log('click a close card');
             count += 1;
             howManyStars(count);
             document.querySelector('.moves').textContent = count;
-            target.className = 'card open show';
+            target.className = 'card open show aminated flipInX';
             matchList.push(target);
             console.log(matchList);
             if (matchList.length == 2) {
                 if (matchList[0].firstElementChild.className ==
                     matchList[1].firstElementChild.className) {
-                    matchList[0].className = 'card open match';
-                    matchList[1].className = 'card open match';
+                    matchList[0].className = 'card open match animated pulse';
+                    matchList[1].className = 'card open match animated pulse';
                     openList.push(matchList[0])
                     console.log('Match successfully')
                     if (openList.length == 8) {
@@ -152,9 +154,11 @@ function clickCard() {
                     matchList = [];
                 } else {
                     matchList.forEach(function(item) {
+                        item.className = 'card open show animated shake';
                         setTimeout(function() {
-                            item.className = 'card';
+                            item.className = 'card animated flipInY';
                         }, 1000);
+                        // item.className = 'card'
                     });
                     console.log('Match failed')
                     matchList = [];
