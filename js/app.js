@@ -34,9 +34,13 @@ function resetCards() {
     // 尝试过 tempCards = cards, 无法进行后面的循环，只能转成 Array 
     let tempCards = Array.prototype.slice.call(cards);
     tempCards = shuffle(tempCards);
-    for (let i = 0; i < tempCards.length; i++) {
-        tempCards[i].className = 'card';
-        deck.appendChild(tempCards[i]);
+    for (let line = 0; line <= tempCards / 4; line++) {
+        let aRow = document.createElement('DIV');
+        aRow.className = 'col-12';
+        deck.appendChild(aRow);
+        for (let i = line * 4; i <= ((line + 1) * 4); i++) {
+            aRow.appendChild(tempCards[i]);
+        }
     }
 }
 

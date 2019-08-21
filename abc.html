@@ -1,0 +1,53 @@
+<!doctype html>
+
+<head>
+    <title>JS test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
+</head>
+
+<body>
+    <div>
+        <select id="sel1" multiple="multiple" size=10>
+            <option>L1</option>
+            <option>L2</option>
+            <option>L3</option>
+            <option>L4</option>
+            <option>L5</option>
+            <option>L6</option>
+        </select>
+        <span>
+            <button onclick="toR()">>></button>
+            <button onclick="toL()"><<</button>
+        </span>
+        <select id="sel2" multiple="multiple" size=10>
+            <option>R1</option>
+            <option>R2</option>
+            <option>R3</option>
+            <option>R4</option>
+            <option>R5</option>
+            <option>R6</option>
+        </select>
+        <script>
+            let select1 = document.getElementById("sel1");
+            let select2 = document.getElementById("sel2");
+
+            function toR() {
+                let childr = select1.childNodes;
+                for (let i = 0; i < childr.length; i++) {
+                    if (childr[i].selected) {
+                        select2.appendChild(childr[i]);
+                    }
+                }
+            }
+
+            function toL() {
+                let childr = select2.childNodes;
+                for (let i = 0; i < childr.length; i++) {
+                    if (childr[i].selected) {
+                        select1.appendChild(childr[i]);
+                    }
+                }
+            }
+        </script>
+    </div>
+</body>
